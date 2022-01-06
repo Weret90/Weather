@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Weather</string>
+    <string name="hint_enter_city_name">Введите название города</string>
+    <string name="button_insert_new_city">Добавить город</string>
+    <string name="label_city_name">Город:</string>
+    <string name="label_date_time">Дата и время:</string>
+    <string name="label_temperature">Температура, С:</string>
 </resources>
