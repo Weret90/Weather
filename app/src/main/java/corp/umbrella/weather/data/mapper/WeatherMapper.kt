@@ -9,7 +9,7 @@ import java.util.*
 class WeatherMapper {
 
     companion object {
-        private const val DATE_TIME_PATTERN = "dd:MM:yyyy HH:mm"
+        private const val DATE_TIME_PATTERN = "dd/MM/yyyy HH:mm"
         private const val WEATHER_ICON_URL = "http://openweathermap.org/img/wn/%s@2x.png"
 
         fun mapDtoToDbModel(dto: WeatherDto) = WeatherDbModel(
