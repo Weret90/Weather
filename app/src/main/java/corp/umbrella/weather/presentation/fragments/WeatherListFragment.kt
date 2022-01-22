@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import corp.umbrella.weather.R
 import corp.umbrella.weather.databinding.FragmentWeatherListBinding
 import corp.umbrella.weather.presentation.adapter.WeatherAdapter
@@ -54,6 +56,8 @@ class WeatherListFragment : Fragment() {
             )
         }
 
+        setupSwipeListener()
+
         binding.buttonAddNewCity.setOnClickListener {
             findNavController().navigate(R.id.action_weatherListFragment_to_addNewCityFragment)
         }
@@ -79,6 +83,26 @@ class WeatherListFragment : Fragment() {
             }
         }
         viewModel.clearLiveData()
+    }
+
+    private fun setupSwipeListener() {
+        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0,
+            ItemTouchHelper.START or ItemTouchHelper.END) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder,
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val weather = weatherAdapter.currentList[viewHolder.adapterPosition]
+                viewModel.deleteCityFromList(weather.cityId)
+            }
+        })
+
+        itemTouchHelper.attachToRecyclerView(binding.weatherListRv)
     }
 
     private fun showToast(text: String) {

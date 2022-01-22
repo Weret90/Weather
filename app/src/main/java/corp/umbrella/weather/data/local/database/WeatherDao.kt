@@ -10,7 +10,7 @@ import corp.umbrella.weather.data.local.models.WeatherDbModel
 @Dao
 interface WeatherDao {
 
-    @Query("SELECT * FROM weather")
+    @Query("SELECT * FROM weather ORDER BY cityName")
     fun getWeatherListLiveData(): LiveData<List<WeatherDbModel>>
 
     @Query("SELECT * FROM weather")
@@ -21,4 +21,7 @@ interface WeatherDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWeatherList(weatherList: List<WeatherDbModel>)
+
+    @Query("DELETE FROM weather WHERE cityId = :cityId")
+    suspend fun deleteWeather(cityId: Int)
 }

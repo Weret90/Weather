@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import corp.umbrella.weather.domain.entities.Weather
+import corp.umbrella.weather.domain.usecases.DeleteCityFromListUseCase
 import corp.umbrella.weather.domain.usecases.GetWeatherListLiveDataUseCase
 import corp.umbrella.weather.domain.usecases.UpdateWeatherListUseCase
 import corp.umbrella.weather.presentation.utils.LoadDataState
@@ -17,6 +17,7 @@ import javax.inject.Inject
 class WeatherListViewModel @Inject constructor(
     getWeatherListLiveDataUseCase: GetWeatherListLiveDataUseCase,
     private val updateWeatherListUseCase: UpdateWeatherListUseCase,
+    private val deleteCityFromListUseCase: DeleteCityFromListUseCase
 ) : ViewModel() {
 
     private val _loadDataStateLiveData = MutableLiveData<LoadDataState?>()
@@ -30,6 +31,12 @@ class WeatherListViewModel @Inject constructor(
 
     init {
         updateWeatherList()
+    }
+
+    fun deleteCityFromList(cityId: Int) {
+        viewModelScope.launch {
+            deleteCityFromListUseCase(cityId)
+        }
     }
 
     private fun updateWeatherList() {

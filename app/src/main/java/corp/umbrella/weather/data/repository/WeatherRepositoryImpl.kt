@@ -43,6 +43,10 @@ class WeatherRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun deleteCityFromList(cityId: Int) {
+        dao.deleteWeather(cityId)
+    }
+
     private suspend fun getCities(): List<String> {
         return dao.getWeatherList().map {
             it.cityName

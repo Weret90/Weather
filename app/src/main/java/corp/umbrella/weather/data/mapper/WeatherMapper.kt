@@ -33,7 +33,7 @@ class WeatherMapper {
         )
 
         fun mapDbModelToDomainEntity(dbModel: WeatherDbModel) = Weather(
-            cityId = dbModel.cityId.toString(),
+            cityId = dbModel.cityId,
             cityName = dbModel.cityName,
             timeOfDate = mapTimeOfDateUnixToString(dbModel.timeOfDateUnix),
             cloudsPercent = dbModel.cloudsPercent.toString() + SIGN_PERCENT,

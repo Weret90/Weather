@@ -8,4 +8,5 @@ interface WeatherRepository {
     fun getWeatherListLiveData(): LiveData<List<Weather>>
     suspend fun addNewCityInList(cityName: String)
     suspend fun updateWeatherList()
+    suspend fun deleteCityFromList(cityId: Int)
 }
