@@ -10,7 +10,7 @@ class WeatherMapper {
 
     companion object {
         private const val DATE_TIME_PATTERN = "dd/MM/yyyy HH:mm"
-        private const val WEATHER_ICON_URL = "http://openweathermap.org/img/wn/%s@2x.png"
+        private const val WEATHER_ICON_URL = "https://openweathermap.org/img/wn/%s@2x.png"
         private const val MILLIS_IN_SECOND = 1000
         private const val SINGLE_ELEMENT_INDEX = 0
         private const val SIGN_PERCENT = " %"
@@ -43,7 +43,7 @@ class WeatherMapper {
             temperature = dbModel.temp.toString() + SIGN_TEMP_CELSIUS,
             description = dbModel.description,
             weatherIconUrl = String.format(WEATHER_ICON_URL, dbModel.weatherIcon),
-            windSpeed = dbModel.toString() + SIGN_WIND_SPEED
+            windSpeed = dbModel.windSpeed.toString() + SIGN_WIND_SPEED
         )
 
         private fun mapTimeOfDateUnixToString(timeOfDateUnix: Int): String {

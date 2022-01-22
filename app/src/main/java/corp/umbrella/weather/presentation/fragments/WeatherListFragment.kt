@@ -35,7 +35,7 @@ class WeatherListFragment : Fragment() {
 
         binding.weatherListRv.adapter = weatherAdapter
 
-        viewModel.getWeatherListLiveData().observe(viewLifecycleOwner) {
+        viewModel.weatherListLiveData.observe(viewLifecycleOwner) {
             weatherAdapter.setData(it)
         }
 
@@ -43,6 +43,13 @@ class WeatherListFragment : Fragment() {
             loadDataState?.let {
                 renderLoadDataState(it)
             }
+        }
+
+        weatherAdapter.onWeatherClickListener = {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, WeatherDetailFragment.newInstance(it))
+                .addToBackStack(null)
+                .commit()
         }
 
         binding.buttonAddNewCity.setOnClickListener {

@@ -10,6 +10,7 @@ import corp.umbrella.weather.domain.entities.Weather
 class WeatherAdapter : RecyclerView.Adapter<WeatherViewHolder>() {
 
     private var weatherList: List<Weather> = listOf()
+    var onWeatherClickListener: ((Weather) -> Unit)? = null
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(weatherList: List<Weather>) {
@@ -25,6 +26,9 @@ class WeatherAdapter : RecyclerView.Adapter<WeatherViewHolder>() {
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
         val weather = weatherList[position]
         holder.bind(weather)
+        holder.itemView.setOnClickListener {
+            onWeatherClickListener?.invoke(weather)
+        }
     }
 
     override fun getItemCount(): Int {

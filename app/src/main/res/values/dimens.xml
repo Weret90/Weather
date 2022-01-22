@@ -4,4 +4,6 @@
     <dimen name="small_margin">8dp</dimen>
     <dimen name="big_text_size">40sp</dimen>
     <dimen name="middle_text_size">20sp</dimen>
+    <dimen name="weather_status_icon_size">100dp</dimen>
+    <dimen name="weather_status_icon_small_size">50dp</dimen>
 </resources>

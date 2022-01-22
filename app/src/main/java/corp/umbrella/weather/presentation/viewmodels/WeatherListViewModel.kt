@@ -12,21 +12,21 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 
 class WeatherListViewModel(
-    private val getWeatherListLiveDataUseCase: GetWeatherListLiveDataUseCase,
+    getWeatherListLiveDataUseCase: GetWeatherListLiveDataUseCase,
     private val updateWeatherListUseCase: UpdateWeatherListUseCase,
 ) : ViewModel() {
 
     private val _loadDataStateLiveData = MutableLiveData<LoadDataState?>()
     val loadDataStateLiveData: LiveData<LoadDataState?> get() = _loadDataStateLiveData
 
-    private val coroutineExceptionHandler =
-        CoroutineExceptionHandler { _, throwable ->
-            _loadDataStateLiveData.value = LoadDataState.Error(throwable)
-        }
+    val weatherListLiveData = getWeatherListLiveDataUseCase()
 
-    fun getWeatherListLiveData(): LiveData<List<Weather>> {
+    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        _loadDataStateLiveData.value = LoadDataState.Error(throwable)
+    }
+
+    init {
         updateWeatherList()
-        return getWeatherListLiveDataUseCase()
     }
 
     private fun updateWeatherList() {

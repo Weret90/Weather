@@ -1,5 +1,9 @@
 package corp.umbrella.weather.domain.entities
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Weather(
     val cityId: String,
     val cityName: String,
@@ -11,5 +15,5 @@ data class Weather(
     val temperature: String,
     val description: String,
     val weatherIconUrl: String,
-    val windSpeed: String
-)
+    val windSpeed: String,
+) : Parcelable
