@@ -12,7 +12,11 @@ class WeatherMapper {
         private const val DATE_TIME_PATTERN = "dd/MM/yyyy HH:mm"
         private const val WEATHER_ICON_URL = "http://openweathermap.org/img/wn/%s@2x.png"
         private const val MILLIS_IN_SECOND = 1000
-        private const val SINGLE_ITEM_INDEX = 0
+        private const val SINGLE_ELEMENT_INDEX = 0
+        private const val SIGN_PERCENT = " %"
+        private const val SIGN_PRESSURE = " кПа"
+        private const val SIGN_TEMP_CELSIUS = " °C"
+        private const val SIGN_WIND_SPEED = " м/с"
 
         fun mapDtoToDbModel(dto: WeatherDto) = WeatherDbModel(
             cityId = dto.cityId,
@@ -23,8 +27,8 @@ class WeatherMapper {
             humidity = dto.mainInfoDto.humidity,
             pressure = dto.mainInfoDto.pressure,
             temp = dto.mainInfoDto.temp,
-            description = dto.weatherInfoDto[SINGLE_ITEM_INDEX].description,
-            weatherIcon = dto.weatherInfoDto[SINGLE_ITEM_INDEX].icon,
+            description = dto.weatherInfoDto[SINGLE_ELEMENT_INDEX].description,
+            weatherIcon = dto.weatherInfoDto[SINGLE_ELEMENT_INDEX].icon,
             windSpeed = dto.windDto.speed
         )
 
@@ -32,14 +36,14 @@ class WeatherMapper {
             cityId = dbModel.cityId.toString(),
             cityName = dbModel.cityName,
             timeOfDate = mapTimeOfDateUnixToString(dbModel.timeOfDateUnix),
-            cloudsPercent = dbModel.cloudsPercent.toString(),
-            humidity = dbModel.humidity.toString(),
-            tempFeelsLike = dbModel.humidity.toString(),
-            pressure = dbModel.pressure.toString(),
-            temperature = dbModel.temp.toString(),
+            cloudsPercent = dbModel.cloudsPercent.toString() + SIGN_PERCENT,
+            humidity = dbModel.humidity.toString() + SIGN_PERCENT,
+            tempFeelsLike = dbModel.humidity.toString() + SIGN_TEMP_CELSIUS,
+            pressure = dbModel.pressure.toString() + SIGN_PRESSURE,
+            temperature = dbModel.temp.toString() + SIGN_TEMP_CELSIUS,
             description = dbModel.description,
             weatherIconUrl = String.format(WEATHER_ICON_URL, dbModel.weatherIcon),
-            windSpeed = dbModel.toString()
+            windSpeed = dbModel.toString() + SIGN_WIND_SPEED
         )
 
         private fun mapTimeOfDateUnixToString(timeOfDateUnix: Int): String {
