@@ -1,8 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/holo_orange_light"
     tools:context=".presentation.fragments.WeatherDetailFragment">
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/weather_detail_city_name"
+        style="@style/weather_detail_main_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/middle_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Якутск" />
+
+    <ImageView
+        android:id="@+id/weather_status_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/ic_launcher_foreground" />
+
+    <TextView
+        android:id="@+id/weather_detail_temp"
+        style="@style/weather_detail_main_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/big_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weather_status"
+        tools:text="24 C" />
+
+    <TextView
+        android:id="@+id/weather_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/middle_margin"
+        android:gravity="center"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weather_status_icon"
+        tools:text="На улице ясно, дождя нет" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.75" />
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/middle_margin"
+        android:columnCount="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline">
+
+
+        <TextView
+            style="@style/weather_detail_table_cell"
+            android:text="@string/label_clouds" />
+
+        <TextView
+            style="@style/weather_detail_table_cell"
+            android:text="@string/label_wind" />
+
+        <TextView
+            android:id="@+id/clouds"
+            style="@style/weather_detail_table_cell"
+            android:textStyle="bold"
+            tools:text="5 %" />
+
+        <TextView
+            android:id="@+id/wind"
+            style="@style/weather_detail_table_cell"
+            android:textStyle="bold"
+            tools:text="5 м/с" />
+
+        <TextView
+            style="@style/weather_detail_table_cell"
+            android:text="@string/label_humidity" />
+
+        <TextView
+            style="@style/weather_detail_table_cell"
+            android:text="@string/label_pressure" />
+
+        <TextView
+            android:id="@+id/humidity"
+            style="@style/weather_detail_table_cell"
+            android:textStyle="bold"
+            tools:text="10 %" />
+
+        <TextView
+            android:id="@+id/pressure"
+            style="@style/weather_detail_table_cell"
+            android:textStyle="bold"
+            tools:text="15 кПа" />
+
+    </GridLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

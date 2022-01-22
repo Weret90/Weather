@@ -4,9 +4,13 @@
     <string name="button_insert_new_city">Добавить город</string>
     <string name="label_city_name">Город:</string>
     <string name="label_date_time">Дата и время:</string>
-    <string name="label_temperature">Температура, С:</string>
+    <string name="label_temperature">Температура:</string>
     <string name="error_incorrect_city_name">Некорректное или пустое название города. Только русские буквы без пробелов, минимум 3 буквы</string>
     <string name="error_add_city_in_list_not_success">Не получилось добавить город: %s</string>
     <string name="success_update_weather_list">Данные успешно обновлены</string>
     <string name="error_update_weather_list_not_success">Ошибка загрузки данных: %s</string>
+    <string name="label_clouds">Облачность:</string>
+    <string name="label_wind">Ветер:</string>
+    <string name="label_humidity">Влажность:</string>
+    <string name="label_pressure">Давление:</string>
 </resources>
