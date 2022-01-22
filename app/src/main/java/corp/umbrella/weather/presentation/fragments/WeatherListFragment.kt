@@ -39,7 +39,7 @@ class WeatherListFragment : Fragment() {
         binding.weatherListRv.adapter = weatherAdapter
 
         viewModel.weatherListLiveData.observe(viewLifecycleOwner) {
-            weatherAdapter.setData(it)
+            weatherAdapter.submitList(it)
         }
 
         viewModel.loadDataStateLiveData.observe(viewLifecycleOwner) { loadDataState ->

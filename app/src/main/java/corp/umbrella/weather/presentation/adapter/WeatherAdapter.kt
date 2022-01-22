@@ -1,22 +1,14 @@
 package corp.umbrella.weather.presentation.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import corp.umbrella.weather.databinding.ItemWeatherBinding
 import corp.umbrella.weather.domain.entities.Weather
 
-class WeatherAdapter : RecyclerView.Adapter<WeatherViewHolder>() {
+class WeatherAdapter : ListAdapter<Weather, WeatherViewHolder>(WeatherItemDiffCallback()) {
 
-    private var weatherList: List<Weather> = listOf()
     var onWeatherClickListener: ((Weather) -> Unit)? = null
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun setData(weatherList: List<Weather>) {
-        this.weatherList = weatherList
-        notifyDataSetChanged()
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
         val binding = ItemWeatherBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -24,14 +16,10 @@ class WeatherAdapter : RecyclerView.Adapter<WeatherViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
-        val weather = weatherList[position]
+        val weather = getItem(position)
         holder.bind(weather)
         holder.itemView.setOnClickListener {
             onWeatherClickListener?.invoke(weather)
         }
-    }
-
-    override fun getItemCount(): Int {
-        return weatherList.size
     }
 }
