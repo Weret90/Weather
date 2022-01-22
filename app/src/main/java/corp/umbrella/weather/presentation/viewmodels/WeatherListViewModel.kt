@@ -8,10 +8,13 @@ import corp.umbrella.weather.domain.entities.Weather
 import corp.umbrella.weather.domain.usecases.GetWeatherListLiveDataUseCase
 import corp.umbrella.weather.domain.usecases.UpdateWeatherListUseCase
 import corp.umbrella.weather.presentation.utils.LoadDataState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class WeatherListViewModel(
+@HiltViewModel
+class WeatherListViewModel @Inject constructor(
     getWeatherListLiveDataUseCase: GetWeatherListLiveDataUseCase,
     private val updateWeatherListUseCase: UpdateWeatherListUseCase,
 ) : ViewModel() {
