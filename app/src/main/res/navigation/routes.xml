@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/routes"
+    app:startDestination="@id/weatherListFragment">
+
+    <fragment
+        android:id="@+id/weatherListFragment"
+        android:name="corp.umbrella.weather.presentation.fragments.WeatherListFragment"
+        android:label="fragment_weather_list"
+        tools:layout="@layout/fragment_weather_list" >
+        <action
+            android:id="@+id/action_weatherListFragment_to_addNewCityFragment"
+            app:destination="@id/addNewCityFragment" />
+        <action
+            android:id="@+id/action_weatherListFragment_to_weatherDetailFragment"
+            app:destination="@id/weatherDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/weatherDetailFragment"
+        android:name="corp.umbrella.weather.presentation.fragments.WeatherDetailFragment"
+        android:label="fragment_weather_detail"
+        tools:layout="@layout/fragment_weather_detail" >
+        <argument
+            android:name="weather"
+            app:argType="corp.umbrella.weather.domain.entities.Weather" />
+    </fragment>
+    <fragment
+        android:id="@+id/addNewCityFragment"
+        android:name="corp.umbrella.weather.presentation.fragments.AddNewCityFragment"
+        android:label="fragment_add_new_city"
+        tools:layout="@layout/fragment_add_new_city" />
+</navigation>

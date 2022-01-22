@@ -5,30 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import com.squareup.picasso.Picasso
 import corp.umbrella.weather.databinding.FragmentWeatherDetailBinding
-import corp.umbrella.weather.domain.entities.Weather
 
 class WeatherDetailFragment : Fragment() {
 
     private var _binding: FragmentWeatherDetailBinding? = null
     private val binding get() = _binding!!
-    private val weather: Weather by lazy {
-        requireArguments().getParcelable<Weather>(KEY_WEATHER) as Weather
-    }
-
-    companion object {
-
-        private const val KEY_WEATHER = "weather"
-
-        fun newInstance(weather: Weather): WeatherDetailFragment {
-            return WeatherDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(KEY_WEATHER, weather)
-                }
-            }
-        }
-    }
+    private val args by navArgs<WeatherDetailFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +25,8 @@ class WeatherDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val weather = args.weather
 
         with(binding) {
             weatherDetailCityName.text = weather.cityName

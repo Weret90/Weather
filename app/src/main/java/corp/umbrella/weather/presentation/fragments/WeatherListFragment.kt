@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import corp.umbrella.weather.R
 import corp.umbrella.weather.databinding.FragmentWeatherListBinding
 import corp.umbrella.weather.presentation.adapter.WeatherAdapter
@@ -46,17 +47,13 @@ class WeatherListFragment : Fragment() {
         }
 
         weatherAdapter.onWeatherClickListener = {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, WeatherDetailFragment.newInstance(it))
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(
+                WeatherListFragmentDirections.actionWeatherListFragmentToWeatherDetailFragment(it)
+            )
         }
 
         binding.buttonAddNewCity.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, AddNewCityFragment())
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(R.id.action_weatherListFragment_to_addNewCityFragment)
         }
     }
 
