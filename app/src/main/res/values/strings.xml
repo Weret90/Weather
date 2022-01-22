@@ -13,4 +13,5 @@
     <string name="label_wind">Ветер:</string>
     <string name="label_humidity">Влажность:</string>
     <string name="label_pressure">Давление:</string>
+    <string name="empty_weather_list">Список городов пока пуст, можете добавить город нажав на кнопку</string>
 </resources>

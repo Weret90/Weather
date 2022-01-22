@@ -70,7 +70,11 @@ class WeatherListFragment : Fragment() {
             }
             is LoadDataState.Success -> {
                 binding.loadingBar.visibility = View.GONE
-                showToast(getString(R.string.success_update_weather_list))
+                if (weatherAdapter.currentList.isEmpty()) {
+                    showToast(getString(R.string.empty_weather_list))
+                } else {
+                    showToast(getString(R.string.success_update_weather_list))
+                }
             }
             is LoadDataState.Error -> {
                 binding.loadingBar.visibility = View.GONE

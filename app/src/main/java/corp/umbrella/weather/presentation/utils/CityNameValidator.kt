@@ -4,7 +4,7 @@ import java.util.regex.Pattern
 
 class CityNameValidator {
     companion object {
-        private const val CITY_NAME_PATTERN = "^[а-яА-Я]{3,}$"
+        private const val CITY_NAME_PATTERN = "^[а-яА-Я-]{3,}$"
 
         fun isCorrectCityName(cityName: String?): Boolean {
             return (cityName != null
