@@ -1,10 +1,9 @@
 package corp.umbrella.weather.di
 
 import androidx.room.Room
-import corp.umbrella.weather.data.local.WeatherDao
-import corp.umbrella.weather.data.local.WeatherDatabase
-import corp.umbrella.weather.data.remote.ApiService
-import corp.umbrella.weather.data.remote.WeatherInterceptor
+import corp.umbrella.weather.data.local.database.WeatherDatabase
+import corp.umbrella.weather.data.remote.network.ApiService
+import corp.umbrella.weather.data.remote.network.WeatherInterceptor
 import corp.umbrella.weather.data.repository.WeatherRepositoryImpl
 import corp.umbrella.weather.domain.repository.WeatherRepository
 import okhttp3.OkHttpClient
@@ -17,8 +16,7 @@ object DataDi {
     private const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
     private const val DB_NAME = "weather.db"
 
-    val remoteModule = module {
-
+    val retrofitModule = module {
         single<OkHttpClient> {
             OkHttpClient().newBuilder()
                 .addInterceptor(WeatherInterceptor)
@@ -35,7 +33,7 @@ object DataDi {
         }
     }
 
-    val localModule = module {
+    val roomModule = module {
         single {
             Room.databaseBuilder(get(), WeatherDatabase::class.java, DB_NAME)
                 .fallbackToDestructiveMigration()

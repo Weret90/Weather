@@ -1,4 +1,4 @@
-package corp.umbrella.weather.data.local
+package corp.umbrella.weather.data.local.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

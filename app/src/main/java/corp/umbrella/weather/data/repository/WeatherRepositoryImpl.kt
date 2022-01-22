@@ -2,13 +2,12 @@ package corp.umbrella.weather.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import corp.umbrella.weather.data.local.WeatherDao
+import corp.umbrella.weather.data.local.database.WeatherDao
 import corp.umbrella.weather.data.mapper.WeatherMapper
-import corp.umbrella.weather.data.remote.ApiService
+import corp.umbrella.weather.data.remote.network.ApiService
 import corp.umbrella.weather.data.remote.models.WeatherDto
 import corp.umbrella.weather.domain.entities.Weather
 import corp.umbrella.weather.domain.repository.WeatherRepository
-import corp.umbrella.weather.domain.utils.Result
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -25,31 +24,21 @@ class WeatherRepositoryImpl(
         }
     }
 
-    override suspend fun addNewCity(cityName: String): Result {
-        return try {
-            val newCityWeather = api.getWeather(cityName)
-            dao.insertWeather(WeatherMapper.mapDtoToDbModel(newCityWeather))
-            Result.Success
-        } catch (error: Throwable) {
-            Result.Error(error)
-        }
+    override suspend fun addNewCityInList(cityName: String) {
+        val newCityWeatherInfo = api.getWeather(cityName)
+        dao.insertWeather(WeatherMapper.mapDtoToDbModel(newCityWeatherInfo))
     }
 
-    override suspend fun updateWeatherList(): Result {
-        return try {
-            coroutineScope {
-                val cities = getCities()
-                val deferredList = mutableListOf<Deferred<WeatherDto>>().apply {
-                    cities.forEach { cityName ->
-                        add(async { api.getWeather(cityName) })
-                    }
+    override suspend fun updateWeatherList() {
+        coroutineScope {
+            val cities = getCities()
+            val deferredWeatherList = mutableListOf<Deferred<WeatherDto>>().apply {
+                cities.forEach { cityName ->
+                    add(async { api.getWeather(cityName) })
                 }
-                val freshWeatherList = deferredList.awaitAll()
-                dao.insertWeatherList(freshWeatherList.map { WeatherMapper.mapDtoToDbModel(it) })
-                Result.Success
             }
-        } catch (error: Throwable) {
-            Result.Error(error)
+            val freshWeatherList = deferredWeatherList.awaitAll()
+            dao.insertWeatherList(freshWeatherList.map { WeatherMapper.mapDtoToDbModel(it) })
         }
     }
 

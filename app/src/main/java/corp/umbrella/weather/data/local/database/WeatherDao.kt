@@ -1,10 +1,11 @@
-package corp.umbrella.weather.data.local
+package corp.umbrella.weather.data.local.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import corp.umbrella.weather.data.local.models.WeatherDbModel
 
 @Dao
 interface WeatherDao {

@@ -7,7 +7,8 @@ import androidx.lifecycle.viewModelScope
 import corp.umbrella.weather.domain.entities.Weather
 import corp.umbrella.weather.domain.usecases.GetWeatherListLiveDataUseCase
 import corp.umbrella.weather.domain.usecases.UpdateWeatherListUseCase
-import corp.umbrella.weather.domain.utils.Result
+import corp.umbrella.weather.presentation.utils.LoadDataState
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 
 class WeatherListViewModel(
@@ -15,10 +16,13 @@ class WeatherListViewModel(
     private val updateWeatherListUseCase: UpdateWeatherListUseCase,
 ) : ViewModel() {
 
-    private val _loadingBarLiveData = MutableLiveData<Boolean>()
-    val loadingBarLiveData: LiveData<Boolean> = _loadingBarLiveData
-    private val _errorLiveData = MutableLiveData<Throwable>()
-    val errorLiveData: LiveData<Throwable> = _errorLiveData
+    private val _loadDataStateLiveData = MutableLiveData<LoadDataState?>()
+    val loadDataStateLiveData: LiveData<LoadDataState?> get() = _loadDataStateLiveData
+
+    private val coroutineExceptionHandler =
+        CoroutineExceptionHandler { _, throwable ->
+            _loadDataStateLiveData.value = LoadDataState.Error(throwable)
+        }
 
     fun getWeatherListLiveData(): LiveData<List<Weather>> {
         updateWeatherList()
@@ -26,18 +30,14 @@ class WeatherListViewModel(
     }
 
     private fun updateWeatherList() {
-        viewModelScope.launch {
-            _loadingBarLiveData.value = true
-            val result = updateWeatherListUseCase()
-            if (result is Result.Error) {
-                _errorLiveData.value = result.error
-            }
-            _loadingBarLiveData.value = false
+        viewModelScope.launch(coroutineExceptionHandler) {
+            _loadDataStateLiveData.value = LoadDataState.Loading
+            updateWeatherListUseCase()
+            _loadDataStateLiveData.value = LoadDataState.Success
         }
     }
 
     fun clearLiveData() {
-        _errorLiveData.value = null
-        _loadingBarLiveData.value = null
+        _loadDataStateLiveData.value = null
     }
 }

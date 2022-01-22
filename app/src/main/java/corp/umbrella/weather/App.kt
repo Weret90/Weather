@@ -14,8 +14,8 @@ class App : Application() {
         startKoin {
             androidContext(this@App)
             modules(
-                DataDi.localModule,
-                DataDi.remoteModule,
+                DataDi.roomModule,
+                DataDi.retrofitModule,
                 DataDi.repositoryModule,
                 DomainDi.useCasesModule,
                 PresentationDi.viewModelsModule

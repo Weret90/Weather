@@ -4,29 +4,32 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import corp.umbrella.weather.domain.usecases.AddNewCityUseCase
-import corp.umbrella.weather.domain.utils.Result
+import corp.umbrella.weather.domain.usecases.AddNewCityInListUseCase
 import corp.umbrella.weather.presentation.utils.CityNameValidator
+import corp.umbrella.weather.presentation.utils.LoadDataState
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 
 class AddNewCityViewModel(
-    private val addNewCityUseCase: AddNewCityUseCase,
+    private val addNewCityInListUseCase: AddNewCityInListUseCase,
 ) : ViewModel() {
 
-    private val _incorrectCityNameLiveData = MutableLiveData<Unit>()
-    val incorrectCityNameLiveData: LiveData<Unit> = _incorrectCityNameLiveData
-    private val _loadingBarLiveData = MutableLiveData<Boolean>()
-    val loadingBarLiveData: LiveData<Boolean> = _loadingBarLiveData
-    private val _addNewCityResultLiveDate = MutableLiveData<Result>()
-    val addNewCityResultLiveDate: LiveData<Result> = _addNewCityResultLiveDate
+    private val _incorrectCityNameLiveData = MutableLiveData<Unit?>()
+    val incorrectCityNameLiveData: LiveData<Unit?> get() = _incorrectCityNameLiveData
 
-    fun addNewCity(cityName: String?) {
-        viewModelScope.launch {
+    private val _loadDataStateLiveData = MutableLiveData<LoadDataState?>()
+    val loadDataStateLiveData: LiveData<LoadDataState?> get() = _loadDataStateLiveData
+
+    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        _loadDataStateLiveData.value = LoadDataState.Error(throwable)
+    }
+
+    fun addNewCityInList(cityName: String?) {
+        viewModelScope.launch(coroutineExceptionHandler) {
             if (CityNameValidator.isCorrectCityName(cityName?.trim())) {
-                _loadingBarLiveData.value = true
-                val result = addNewCityUseCase(cityName!!.trim().lowercase())
-                _addNewCityResultLiveDate.value = result
-                _loadingBarLiveData.value = false
+                _loadDataStateLiveData.value = LoadDataState.Loading
+                addNewCityInListUseCase(cityName!!.trim().lowercase())
+                _loadDataStateLiveData.value = LoadDataState.Success
             } else {
                 _incorrectCityNameLiveData.value = Unit
             }
@@ -35,7 +38,6 @@ class AddNewCityViewModel(
 
     fun clearLiveData() {
         _incorrectCityNameLiveData.value = null
-        _addNewCityResultLiveDate.value = null
-        _loadingBarLiveData.value = null
+        _loadDataStateLiveData.value = null
     }
 }

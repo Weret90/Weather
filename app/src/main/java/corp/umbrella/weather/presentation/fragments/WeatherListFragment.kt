@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import corp.umbrella.weather.R
 import corp.umbrella.weather.databinding.FragmentWeatherListBinding
 import corp.umbrella.weather.presentation.adapter.WeatherAdapter
+import corp.umbrella.weather.presentation.utils.LoadDataState
 import corp.umbrella.weather.presentation.viewmodels.WeatherListViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -38,21 +39,9 @@ class WeatherListFragment : Fragment() {
             weatherAdapter.setData(it)
         }
 
-        viewModel.loadingBarLiveData.observe(viewLifecycleOwner) { isLoading ->
-            isLoading?.let {
-                if (isLoading) {
-                    binding.loadingBar.visibility = View.VISIBLE
-                } else {
-                    binding.loadingBar.visibility = View.GONE
-                }
-                viewModel.clearLiveData()
-            }
-        }
-
-        viewModel.errorLiveData.observe(viewLifecycleOwner) {
-            it?.let {
-                showToast("Ошибка загрузки данных: ${it.message}")
-                viewModel.clearLiveData()
+        viewModel.loadDataStateLiveData.observe(viewLifecycleOwner) { loadDataState ->
+            loadDataState?.let {
+                renderLoadDataState(it)
             }
         }
 
@@ -62,6 +51,28 @@ class WeatherListFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
+    }
+
+    private fun renderLoadDataState(state: LoadDataState) {
+        when (state) {
+            is LoadDataState.Loading -> {
+                binding.loadingBar.visibility = View.VISIBLE
+            }
+            is LoadDataState.Success -> {
+                binding.loadingBar.visibility = View.GONE
+                showToast(getString(R.string.success_update_weather_list))
+            }
+            is LoadDataState.Error -> {
+                binding.loadingBar.visibility = View.GONE
+                showToast(
+                    String.format(
+                        getString(R.string.error_update_weather_list_not_success),
+                        state.throwable.message
+                    )
+                )
+            }
+        }
+        viewModel.clearLiveData()
     }
 
     private fun showToast(text: String) {

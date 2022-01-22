@@ -1,4 +1,4 @@
-package corp.umbrella.weather.data.remote
+package corp.umbrella.weather.data.remote.network
 
 import corp.umbrella.weather.BuildConfig
 import okhttp3.Interceptor

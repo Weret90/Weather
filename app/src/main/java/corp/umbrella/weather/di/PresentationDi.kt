@@ -13,7 +13,7 @@ object PresentationDi {
         }
 
         viewModel {
-            AddNewCityViewModel(addNewCityUseCase = get())
+            AddNewCityViewModel(addNewCityInListUseCase = get())
         }
     }
 }

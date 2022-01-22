@@ -6,8 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import corp.umbrella.weather.R
 import corp.umbrella.weather.databinding.FragmentAddNewCityBinding
-import corp.umbrella.weather.domain.utils.Result
+import corp.umbrella.weather.presentation.utils.LoadDataState
 import corp.umbrella.weather.presentation.viewmodels.AddNewCityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -28,44 +29,46 @@ class AddNewCityFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.addNewCityResultLiveDate.observe(viewLifecycleOwner) { result ->
-            result?.let {
-                when (result) {
-                    is Result.Success -> {
-                        parentFragmentManager.popBackStack()
-                    }
-                    is Result.Error -> {
-                        showToast("Не получилось добавить город: ${result.error.message}")
-                    }
-                }
-                viewModel.clearLiveData()
+        viewModel.loadDataStateLiveData.observe(viewLifecycleOwner) { loadDataState ->
+            loadDataState?.let {
+                renderLoadDataState(it)
             }
         }
 
         viewModel.incorrectCityNameLiveData.observe(viewLifecycleOwner) {
             it?.let {
-                showToast("Некорректное или пустое название города. Только русские буквы без пробелов, минимум 3 буквы")
-                viewModel.clearLiveData()
-            }
-        }
-
-        viewModel.loadingBarLiveData.observe(viewLifecycleOwner) { isLoading ->
-            isLoading?.let {
-                if (isLoading) {
-                    binding.loadingBar.visibility = View.VISIBLE
-                    binding.buttonInsertNewCity.isEnabled = false
-                } else {
-                    binding.loadingBar.visibility = View.GONE
-                    binding.buttonInsertNewCity.isEnabled = true
-                }
+                showToast(getString(R.string.error_incorrect_city_name))
                 viewModel.clearLiveData()
             }
         }
 
         binding.buttonInsertNewCity.setOnClickListener {
             val cityName = binding.cityNameInputField.text.toString()
-            viewModel.addNewCity(cityName)
+            viewModel.addNewCityInList(cityName)
         }
+    }
+
+    private fun renderLoadDataState(state: LoadDataState) {
+        when (state) {
+            is LoadDataState.Loading -> {
+                binding.loadingBar.visibility = View.VISIBLE
+                binding.buttonInsertNewCity.isEnabled = false
+            }
+            is LoadDataState.Success -> {
+                parentFragmentManager.popBackStack()
+            }
+            is LoadDataState.Error -> {
+                binding.loadingBar.visibility = View.GONE
+                binding.buttonInsertNewCity.isEnabled = true
+                showToast(
+                    String.format(
+                        getString(R.string.error_add_city_in_list_not_success),
+                        state.throwable.message
+                    )
+                )
+            }
+        }
+        viewModel.clearLiveData()
     }
 
     private fun showToast(text: String) {
