@@ -17,17 +17,18 @@ import javax.inject.Inject
 class WeatherRepositoryImpl @Inject constructor(
     private val dao: WeatherDao,
     private val api: ApiService,
+    private val mapper: WeatherMapper
 ) : WeatherRepository {
 
     override fun getWeatherListLiveData(): LiveData<List<Weather>> {
         return Transformations.map(dao.getWeatherListLiveData()) { list ->
-            list.map { WeatherMapper.mapDbModelToDomainEntity(it) }
+            list.map { mapper.mapDbModelToDomainEntity(it) }
         }
     }
 
     override suspend fun addNewCityInList(cityName: String) {
         val newCityWeatherInfo = api.getWeather(cityName)
-        dao.insertWeather(WeatherMapper.mapDtoToDbModel(newCityWeatherInfo))
+        dao.insertWeather(mapper.mapDtoToDbModel(newCityWeatherInfo))
     }
 
     override suspend fun updateWeatherList() {
@@ -39,7 +40,7 @@ class WeatherRepositoryImpl @Inject constructor(
                 }
             }
             val freshWeatherList = deferredWeatherList.awaitAll()
-            dao.insertWeatherList(freshWeatherList.map { WeatherMapper.mapDtoToDbModel(it) })
+            dao.insertWeatherList(freshWeatherList.map { mapper.mapDtoToDbModel(it) })
         }
     }
 
