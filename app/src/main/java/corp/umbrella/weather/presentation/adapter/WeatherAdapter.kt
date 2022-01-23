@@ -9,6 +9,7 @@ import corp.umbrella.weather.domain.entities.Weather
 class WeatherAdapter : ListAdapter<Weather, WeatherViewHolder>(WeatherItemDiffCallback()) {
 
     var onWeatherClickListener: ((Weather) -> Unit)? = null
+    var onWeatherLongClickListener: ((Weather) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
         val binding = ItemWeatherBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -20,6 +21,10 @@ class WeatherAdapter : ListAdapter<Weather, WeatherViewHolder>(WeatherItemDiffCa
         holder.bind(weather)
         holder.itemView.setOnClickListener {
             onWeatherClickListener?.invoke(weather)
+        }
+        holder.itemView.setOnLongClickListener {
+            onWeatherLongClickListener?.invoke(weather)
+            true
         }
     }
 }

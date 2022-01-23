@@ -56,6 +56,10 @@ class WeatherListFragment : Fragment() {
             )
         }
 
+        weatherAdapter.onWeatherLongClickListener = {
+            viewModel.deleteCityFromList(it.cityId)
+        }
+
         setupSwipeListener()
 
         binding.buttonAddNewCity.setOnClickListener {
