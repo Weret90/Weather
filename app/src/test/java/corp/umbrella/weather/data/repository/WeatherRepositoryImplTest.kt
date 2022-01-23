@@ -4,10 +4,10 @@ import corp.umbrella.weather.data.local.database.WeatherDao
 import corp.umbrella.weather.data.mapper.WeatherMapper
 import corp.umbrella.weather.data.remote.network.ApiService
 import corp.umbrella.weather.domain.repository.WeatherRepository
-import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
+import org.junit.Assert.*
 import org.mockito.kotlin.*
 
 class WeatherRepositoryImplTest {
