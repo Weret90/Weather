@@ -15,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddNewCityViewModel @Inject constructor(
     private val addNewCityInListUseCase: AddNewCityInListUseCase,
+    private val validator: CityNameValidator
 ) : ViewModel() {
 
     private val _incorrectCityNameLiveData = MutableLiveData<Unit?>()
@@ -29,7 +30,7 @@ class AddNewCityViewModel @Inject constructor(
 
     fun addNewCityInList(cityName: String?) {
         viewModelScope.launch(coroutineExceptionHandler) {
-            if (CityNameValidator.isCorrectCityName(cityName?.trim())) {
+            if (validator.isCorrectCityName(cityName?.trim())) {
                 _loadDataStateLiveData.value = LoadDataState.Loading
                 addNewCityInListUseCase(cityName!!.trim().lowercase())
                 _loadDataStateLiveData.value = LoadDataState.Success
